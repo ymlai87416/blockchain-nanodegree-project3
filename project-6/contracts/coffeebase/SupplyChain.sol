@@ -165,6 +165,7 @@ FarmerRole, RetailerRole, Ownable{
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
   function harvestItem(uint _upc, address _originFarmerID, string memory _originFarmName, 
     string memory _originFarmInformation, string memory _originFarmLatitude, string memory _originFarmLongitude, string memory _productNotes) public 
+    onlyFarmer
   {
     // Add the new item as part of Harvest
     Item memory item = Item(
@@ -192,6 +193,7 @@ FarmerRole, RetailerRole, Ownable{
   harvested(_upc)
   // Call modifier to verify caller of this function
   verifyCaller(items[_upc].ownerID)
+  onlyFarmer
   {
     // Update the appropriate fields
     items[_upc].itemState = State.Processed;
@@ -205,6 +207,7 @@ FarmerRole, RetailerRole, Ownable{
   processed(_upc)
   // Call modifier to verify caller of this function
   verifyCaller(items[_upc].ownerID)
+  onlyFarmer
   {
     // Update the appropriate fields
     items[_upc].itemState = State.Packed;
@@ -218,6 +221,7 @@ FarmerRole, RetailerRole, Ownable{
   packed(_upc)
   // Call modifier to verify caller of this function
   verifyCaller(items[_upc].ownerID)
+  onlyFarmer
   {
     // Update the appropriate fields
     items[_upc].itemState = State.ForSale;
@@ -236,6 +240,7 @@ FarmerRole, RetailerRole, Ownable{
     paidEnough(_upc)
     // Call modifer to send any excess ether back to buyer
     checkValue(_upc)
+    onlyDistributor
     {
     
     // Update the appropriate fields - ownerID, distributorID, itemState
@@ -256,6 +261,7 @@ FarmerRole, RetailerRole, Ownable{
     sold(_upc)
     // Call modifier to verify caller of this function
     verifyCaller(items[_upc].ownerID)
+    onlyDistributor
     {
     // Update the appropriate fields
     items[_upc].itemState = State.Shipped;

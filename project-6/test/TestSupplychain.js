@@ -41,9 +41,19 @@ contract('SupplyChain', function(accounts) {
     console.log("Retailer: accounts[3] ", accounts[3])
     console.log("Consumer: accounts[4] ", accounts[4])
 
+    before(async function () { 
+        const supplyChain = await SupplyChain.deployed();
+
+        // add farmer, distributor, retailer, consumer by owner
+        await supplyChain.addFarmer(accounts[1], {from: accounts[0]});
+        await supplyChain.addDistributor(accounts[2], {from: accounts[0]});
+        await supplyChain.addRetailer(accounts[3], {from: accounts[0]});
+        await supplyChain.addConsumer(accounts[4], {from: accounts[0]});
+    })
+
     // 1st Test
     it("Testing smart contract function harvestItem() that allows a farmer to harvest coffee", async() => {
-        const supplyChain = await SupplyChain.deployed()
+        const supplyChain = await SupplyChain.deployed();
         
         // Declare and Initialize a variable for event
         var eventEmitted = false
@@ -290,7 +300,6 @@ contract('SupplyChain', function(accounts) {
         })
 
         // Mark an item as Sold by calling function receiveItem()
-        await supplyChain.addRetailer(accounts[3]);
         await supplyChain.receiveItem(upc, {from: accounts[3]})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
@@ -330,7 +339,6 @@ contract('SupplyChain', function(accounts) {
         })
 
         // Mark an item as Sold by calling function purchaseItem()
-        await supplyChain.addConsumer(accounts[4]);
         await supplyChain.purchaseItem(upc, {from: accounts[4]})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
